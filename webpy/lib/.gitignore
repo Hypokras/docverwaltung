@@ -1,2 +1,2 @@
-web.py-*
-wsgilog-*
+web.py*
+wsgilog*
