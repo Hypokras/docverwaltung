@@ -315,8 +315,8 @@ class docverwaltung(webctx):
 		try:
 			post = json.loads(web.data())
 		except:
-			return '{ "meta": {"error": 1, "version": "0.0.1"}}'
+			return '{ "meta": {"error": 1, "error_message": "no valid json received", "version": "0.0.1"}}'
 		
 		#return post
-		return testinterface.test(post)
+		return testinterface.dosomething(post)
 		
