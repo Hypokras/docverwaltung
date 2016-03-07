@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
+import os, json
+import filehelper
 
 
 workdir = os.path.join(os.path.dirname(__file__), '..', 'ExampleFiles', 'workdir')
@@ -66,21 +67,34 @@ def dosomething(message):
 		"""	%validationresult
 		
 	if message['meta']['action'] == "list":
-		return """\
+	
+		store = os.path.join(workdir, message['meta']['store'])
+		files = filehelper.getConvertedFiles(store, message['meta']['width'], message['meta']['height'], limit=message['meta']['limit'])
+		if files:
+			template = dict()
+			template['meta'] = dict()
+			template['items'] = dict()
+			template['meta']['error'] = 0
+			template['meta']['version'] = "0.0.1"
+			template['meta']['length'] = len(files)
+			template['meta']['start'] = message['meta']['start']
+			template['meta']['limit'] = message['meta']['limit']
+			template['meta']['action'] = message['meta']['action']
+			template['meta']['fields'] = ['width','height','store','content-type']
+			
+			for x in files:
+				template['items'][x] = [message['meta']['width'], message['meta']['height'], message['meta']['store'], message['meta']['content-type']]
+			return json.dumps(template)
+		else:
+			return """\
 {
 	"meta": {
 		"error": 1,
-		"error_message": "not yet implemented...",
+		"error_message": "no files found in %s",
 		"version": "0.0.1"
 	}
 }
-		"""
-
-
-
-
-
-
+			""" %store
 
 
 	else:
