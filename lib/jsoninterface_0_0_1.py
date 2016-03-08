@@ -25,7 +25,7 @@ workdir = os.path.join(os.path.dirname(__file__), '..', 'ExampleFiles', 'workdir
 }
 """
 def validate(message):
-	contenttype = ['image/tiff']
+	contenttype = ['image/tiff','image/png','image/jpeg']
 	limit = [1, 999]
 	store = os.listdir(workdir)
 	width = [1, 2550]
@@ -69,7 +69,7 @@ def dosomething(message):
 	if message['meta']['action'] == "list":
 	
 		store = os.path.join(workdir, message['meta']['store'])
-		files = filehelper.getConvertedFiles(store, message['meta']['width'], message['meta']['height'], limit=message['meta']['limit'])
+		files = filehelper.getConvertedFiles(store, message['meta']['width'], message['meta']['height'], limit=message['meta']['limit'], contenttype=message['meta']['content-type'])
 		if files:
 			template = dict()
 			template['meta'] = dict()
@@ -78,7 +78,7 @@ def dosomething(message):
 			template['meta']['version'] = "0.0.1"
 			template['meta']['length'] = len(files)
 			template['meta']['start'] = message['meta']['start']
-			template['meta']['limit'] = message['meta']['limit']
+			template['meta']['limit'] = message['meta']['limit'] #or len(files)?
 			template['meta']['action'] = message['meta']['action']
 			template['meta']['fields'] = ['width','height','store','content-type']
 			
