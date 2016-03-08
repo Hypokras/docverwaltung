@@ -27,6 +27,7 @@ workdir = os.path.join(os.path.dirname(__file__), '..', 'ExampleFiles', 'workdir
 def validate(message):
 	contenttype = ['image/tiff','image/png','image/jpeg']
 	limit = [1, 999]
+	start = [1, 999]
 	store = os.listdir(workdir)
 	width = [1, 2550]
 	height = [1, 3300]
@@ -38,6 +39,9 @@ def validate(message):
 		
 	if not message['meta']['limit'] in range(limit[0], limit[1]):
 		error_message = error_message + ", Limit out of range: " + str(message['meta']['limit'])
+		
+	if not message['meta']['start'] in range(start[0], start[1]):
+		error_message = error_message + ", Start out of range: " + str(message['meta']['start'])
 	
 	if not message['meta']['store'] in store:
 		error_message = error_message + ", Unknown store: " + message['meta']['store']
@@ -76,7 +80,7 @@ def dosomething(message):
 			template['items'] = dict()
 			template['meta']['error'] = 0
 			template['meta']['version'] = "0.0.1"
-			template['meta']['length'] = len(files)
+			template['meta']['length'] = filehelper.count(store)
 			template['meta']['start'] = message['meta']['start']
 			template['meta']['limit'] = message['meta']['limit'] #or len(files)?
 			template['meta']['action'] = message['meta']['action']

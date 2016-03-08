@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
+import os, subprocess
 
 workdir = os.path.join(os.path.dirname(__file__), '..', 'ExampleFiles', 'workdir')
 
@@ -14,22 +14,30 @@ def getFiles(folder):
 	
 def getConvertedFiles(folder, width, height, limit=10, contenttype="image/tiff"):
 	returnvalue = []
-	thumpdir = os.path.join(folder, 'thumpnails')
-	if not os.path.isdir(thumpdir):
-		os.makedirs(thumpdir)
+	thumbdir = os.path.join(folder, 'thumbnails')
+	if not os.path.isdir(thumbdir):
+		os.makedirs(thumbdir)
 	files = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
 	if limit < len(files):
 		files = files[:limit]
-	for x in files:
+	for currentfile in files:
 	
-		thumpname = x.split(".")[0] + "_" + str(width) + "x" + str(height) + "." + contenttype.split("/")[1]
-		#thumpname = x[:len(x)-5] + "_" + str(width)+ "x" + str(height) + x[len(x)-5:]
-		currentfile = os.path.relpath(os.path.abspath(os.path.join(thumpdir,thumpname)), os.path.join(workdir, '..'))
-		returnvalue.append(currentfile)
-		if not os.path.isfile(os.path.join(thumpdir,thumpname)):
-			#hier sollte convertiert werden
-			touch(os.path.join(thumpdir,thumpname))
+		thumbname = currentfile.split(".")[0] + "_" + str(width) + "x" + str(height) + "." + contenttype.split("/")[1]
+		currentthumbfile = os.path.relpath(os.path.abspath(os.path.join(thumbdir,thumbname)), os.path.join(workdir, '..'))
+		returnvalue.append(currentthumbfile)
+		if not os.path.isfile(os.path.join(thumbdir,thumbname)):
+			
+			makethumb(width, height, os.path.abspath(os.path.join(folder,currentfile)), os.path.abspath(os.path.join(thumbdir,thumbname)))
+			#touch(os.path.join(thumbdir,thumbname))
 		else:
 			pass
 	return returnvalue
 	
+def count(folder):
+	files = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
+	return len(files)
+	
+def makethumb(width, height, source, destination):
+	size = str(width)+"x"+str(height)
+	p = subprocess.Popen(["convert", "-thumbnail", size, source, destination])
+	p.communicate()
