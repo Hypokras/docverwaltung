@@ -27,7 +27,7 @@ workdir = os.path.join(os.path.dirname(__file__), '..', 'ExampleFiles', 'workdir
 def validate(message):
 	contenttype = ['image/tiff','image/png','image/jpeg']
 	limit = [1, 999]
-	start = [1, 999]
+	start = [0, 999]
 	store = os.listdir(workdir)
 	width = [1, 2550]
 	height = [1, 3300]
