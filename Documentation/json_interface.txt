@@ -17,6 +17,17 @@ Dokumente abholen:
 	}
 }
 
+Dokument bearbeiten:
+
+{
+	"meta": {
+	"version": "0.0.1",
+	"store": "queue",
+	"filename": "example01.tiff"
+	"action": "modify",
+	"parameter": { "rotation": 90, "store": "folder01"}
+	}
+}
 
 Antwort:
 {
