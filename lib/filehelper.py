@@ -6,9 +6,10 @@ import os, subprocess
 workdir = os.path.join(os.path.dirname(__file__), '..', 'ExampleFiles', 'workdir')
 
 	
-def getConvertedFiles(folder, width, height, limit=10, contenttype="image/tiff"):
+def getConvertedFilesOld(folder, width, height, limit=10, contenttype="image/tiff"):
 	returnvalue = []
 	thumbdir = os.path.join(folder, 'thumbnails')
+	
 	if not os.path.isdir(thumbdir):
 		os.makedirs(thumbdir)
 	files = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
@@ -28,6 +29,32 @@ def getConvertedFiles(folder, width, height, limit=10, contenttype="image/tiff")
 	return returnvalue
 	
 	
+def getConvertedFiles(folder, width, height, limit=10, start=0, contenttype="image/png"):
+	returnvalue = []
+	#Does the Thumbdir in the current folder exist?
+	thumbdir = os.path.join(folder, 'thumbnails')
+	if not os.path.isdir(thumbdir):
+		os.makedirs(thumbdir)
+		
+	files = getFiles(folder, limit, start)
+	for currentfile in files:
+		thumbname = currentfile.split(".")[0] + "_" + str(width) + "x" + str(height) + "." + contenttype.split("/")[1]
+
+		returnvalue.append(thumbname)
+		if not os.path.isfile(os.path.join(thumbdir,thumbname)):
+			makethumbabs(width, height, os.path.abspath(os.path.join(folder,currentfile)), os.path.abspath(os.path.join(thumbdir,thumbname)))
+		else:
+			pass
+	return returnvalue
+	
+def getFiles(folder, limit=10, start=0):
+	#returns a list with filenames ordered by Name or False
+	files = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
+	files.sort()
+	if len(files) >= start:
+		return files[start:limit]
+	else:
+		return False
 	
 
 ##############
@@ -76,10 +103,11 @@ def move(source, destination):
 	try:
 		if not os.path.isfile(source):
 			return False
-		if not os.path.isdir(destionation)
+		if not os.path.isdir(destionation):
 			return False
 		#move from a to b
 		#delete thumbs
-	
+	except:
+		pass
 	
 	
