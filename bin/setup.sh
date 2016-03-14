@@ -10,3 +10,7 @@ mkdir workdir/folder2
 mkdir workdir/folder3
 
 unzip -d workdir/queue -o example01.tiff.zip
+
+cd ../webpy
+./bin/setup.sh
+
