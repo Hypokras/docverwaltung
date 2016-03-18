@@ -1,6 +1,8 @@
 [submodule "webrest"]
 	path = webrest
 	url = git@github.com:samuelpulfer/webrest.git
+	branch = docverwaltung
 [submodule "webpy"]
 	path = webpy
 	url = git@github.com:samuelpulfer/webpy.git
+	branch = docverwaltung
