@@ -1,3 +1,6 @@
 [submodule "webrest"]
 	path = webrest
 	url = git@github.com:samuelpulfer/webrest.git
+[submodule "webpy"]
+	path = webpy
+	url = git@github.com:samuelpulfer/webpy.git
