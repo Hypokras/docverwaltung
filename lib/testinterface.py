@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import json
-import jsoninterface_0_0_1
+import interface_0_0_1
 
 def test(value):
 	return """\
@@ -20,37 +20,33 @@ def dosomething(message):
 
 
 	if len(message) == 0:
-		return """\
-{
+		return {
 	"meta": {
 		"error": 1,
 		"error_message": "no data received",
 		"version": "0.0.1"
 	}
 }
-		"""
+		
 	message = json.loads(message)
 	if not 'meta' in list(message):
-		return """\
-{
+		return {
 	"meta": {
 		"error": 1,
 		"error_message": "unknown format",
 		"version": "0.0.1"
 	}
 }
-		"""
+
 	if message['meta']['version'] == "0.0.1":
-		return jsoninterface_0_0_1.dosomething(message)
+		return interface_0_0_1.dosomething(message)
 	else:
-		return """\
-{
+		return {
 	"meta": {
 		"error": 1,
-		"error_message": "unknown version: %s",
+		"error_message": "unknown version: " + message['meta']['version'],
 		"version": "0.0.1"
 	}
 }
-		"""	%message['meta']['version']
-	
+
 	

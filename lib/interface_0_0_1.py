@@ -61,15 +61,14 @@ def validate(message):
 def dosomething(message):
 	validationresult = validate(message)
 	if validationresult:
-		return """\
-{
+		return {
 	"meta": {
 		"error": 1,
-		"error_message": "Validation failed: %s",
+		"error_message": "Validation failed: " + validationresult,
 		"version": "0.0.1"
 	}
 }
-		"""	%validationresult
+
 		
 	if message['meta']['action'] == "list":
 	
@@ -89,28 +88,25 @@ def dosomething(message):
 			
 			for x in files:
 				template['items'][x] = [message['meta']['width'], message['meta']['height'], message['meta']['store'], message['meta']['content-type']]
-			return json.dumps(template)
+			return template
 		else:
-			return """\
-{
+			return {
 	"meta": {
 		"error": 1,
-		"error_message": "no files found in %s",
+		"error_message": "no files found in " + store,
 		"version": "0.0.1"
 	}
 }
-			""" %store
 
 
 	else:
-		return """\
-{
+		return {
 	"meta": {
 		"error": 1,
-		"error_message": "unknown action: %s",
+		"error_message": "unknown action: " + message['meta']['action'],
 		"version": "0.0.1"
 	}
 }
-		"""	%message['meta']['action']
+
 		
 
