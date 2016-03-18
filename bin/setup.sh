@@ -13,4 +13,6 @@ unzip -d workdir/queue -o example01.tiff.zip
 
 cd ../webpy
 ./bin/setup.sh
+cd ../webrest
+./bin/setup.sh
 
