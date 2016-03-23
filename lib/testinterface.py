@@ -27,8 +27,7 @@ def dosomething(message):
 		"version": "0.0.1"
 	}
 }
-		
-	message = json.loads(message)
+	
 	if not 'meta' in list(message):
 		return {
 	"meta": {
