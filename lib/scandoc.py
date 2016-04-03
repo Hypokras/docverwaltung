@@ -14,10 +14,12 @@ scannerconfig = ConfigParser.ConfigParser()
 scannerconfig.read(scannerconfpath)
 
 def scan():	
-	datadir = os.path.join(scandocconfig.get('init','datadir'), "raw")
+	workdir = os.path.join(scandocconfig.get('init','workdir'), "raw")
+	if not os.path.isdir(workdir):
+		os.makedirs(workdir)
 	scan_batchstart = "1"
 	batchname = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-	batchfilename = os.path.join(datadir, (batchname + "-%d." + scannerconfig.get("default", "scan_format")))
+	batchfilename = os.path.join(workdir, (batchname + "-%d." + scannerconfig.get("default", "scan_format")))
 	params = [
 						"scanimage", "-b",
 						"-d", scannerconfig.get("default", "scan_device"), 
@@ -45,20 +47,20 @@ def scan():
 		
 def prepare():
 	#herausfinden was noch nicht vorbereitet wurde
-	source = os.listdir(os.path.join(scandocconfig.get('init','datadir'), "raw"))
-	destination = os.listdir(os.path.join(scandocconfig.get('init','datadir'), "edited"))
+	source = os.listdir(os.path.join(scandocconfig.get('init','workdir'), "raw"))
+	destination = os.listdir(os.path.join(scandocconfig.get('init','workdir'), "queue"))
 	todo = list(set(source) - set(destination))
 	for x in todo:
-		p = subprocess.Popen(["mogrify", "-path", os.path.join(scandocconfig.get('init','datadir'), "edited"),"-normalize", "-level", "27%,76%", os.path.join(scandocconfig.get('init','datadir'), "raw", x)])
+		p = subprocess.Popen(["mogrify", "-path", os.path.join(scandocconfig.get('init','workdir'), "queue"),"-normalize", "-level", "27%,76%", os.path.join(scandocconfig.get('init','workdir'), "raw", x)])
 		p.communicate()
 
 def ocr():
 	#herausfinden was noch nicht zu PDF umgewandelt wurde
-	source = os.listdir(os.path.join(scandocconfig.get('init','datadir'), "edited"))
-	destination = os.listdir(os.path.join(scandocconfig.get('init','datadir'), "pdf"))
+	source = os.listdir(os.path.join(scandocconfig.get('init','workdir'), "edited"))
+	destination = os.listdir(os.path.join(scandocconfig.get('init','workdir'), "pdf"))
 	todo = list(set(source) - set(destination))
 	for x in todo:
-		p = subprocess.Popen(["tesseract", "-l", "deu", "-psm", "3", os.path.join(scandocconfig.get('init','datadir'), "edited", x), os.path.join(scandocconfig.get('init','datadir'), "pdf", x), "pdf"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		p = subprocess.Popen(["tesseract", "-l", "deu", "-psm", "3", os.path.join(scandocconfig.get('init','workdir'), "edited", x), os.path.join(scandocconfig.get('init','workdir'), "pdf", x), "pdf"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		p.communicate()
 		
 		
