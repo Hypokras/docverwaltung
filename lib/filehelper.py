@@ -55,8 +55,15 @@ def getFiles(folder, limit=10, start=0):
 		return files[start:limit]
 	else:
 		return False
+##############
+# return imagenames in folder in workdir
+def getImages(folder):
+	return getFiles(os.path.join(workdir, folder), limit=None)	
+##############
+# return folders in workdir
+def getStores():
+	return os.listdir(workdir)
 	
-
 ##############
 # count files in folder.
 # return sum or false	
